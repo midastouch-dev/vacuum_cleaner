@@ -12,6 +12,7 @@ class VacuumCleaner:
 	"""
 	def __init__(self):
 		self.current_room = 1 # The room number that the vacuum cleaner is located on for now
+		self.cleaned_room = []; # The list of rooms the vacuum cleaner cleaned
 
 	"""
 	The vacuum move to cleaning room from current position and the current_room is set to the cleaning room.
@@ -20,18 +21,17 @@ class VacuumCleaner:
 	"""
 	def traverse_to(self, room):
 		path = [] # The path the vacuum is moved to cleaning room from current room
-		room_passed_without_cleaning = 0; # The count of rooms passed without cleaning
 
 		if room > self.current_room: # The vacuum move right
 			path.extend(range(self.current_room + 1, room + 1))
-			room_passed_without_cleaning += room - self.current_room - 1
+			self.cleaned_room.append(room);
 		elif room < self.current_room: # The vacuum move left
 			path.extend(range(self.current_room - 1, room - 1, -1))
-			room_passed_without_cleaning += self.current_room - room - 1
+			self.cleaned_room.append(room);
 
 		self.current_room = room
 
-		return path, room_passed_without_cleaning
+		return path
 
 	"""
 	The vacuum cleaner is received the cleaning command and return the result.
@@ -40,8 +40,8 @@ class VacuumCleaner:
 	def process_clearning_batches(self, cleaning_batches, priority_rooms):
 		total_cleaned_rooms = 0 # The tatal count of rooms cleaned by vacuum
 		total_batches = 0 # The total count of batches processed
-		path_token = [] # The final path that the vacuum move during process the comment
-		room_passed_without_cleaning = 0 # The total count of rooms passed without cleaning
+		traverse_path = [] # The path of vacuum cleaner traverse
+		self.cleaned_room = []; # Initialized the cleaned rooms when start the cleaning
 
 		# Get all batches(array) from cleaning batches(array of array)
 		for batch in cleaning_batches:
@@ -55,9 +55,8 @@ class VacuumCleaner:
 			"""
 			for priority_room in priority_rooms:
 				if priority_room in batch:
-					path, rooms_without_cleaning = self.traverse_to(priority_room)
-					path_token.extend(path)
-					room_passed_without_cleaning += rooms_without_cleaning
+					path = self.traverse_to(priority_room)
+					traverse_path.extend(path)
 					cleaned_in_batch.append(priority_room)
 					total_cleaned_rooms += 1
 
@@ -69,16 +68,17 @@ class VacuumCleaner:
 			"""
 			for room in batch:
 				if room not in cleaned_in_batch:
-					path, rooms_without_cleaning = self.traverse_to(room)
-					path_token.extend(path)
-					room_passed_without_cleaning += rooms_without_cleaning
+					path = self.traverse_to(room)
+					traverse_path.extend(path)
 					total_cleaned_rooms += 1
 
+
 		return {
-			"path_token": path_token,
+			"cleaned_rooms": self.cleaned_room,
+			"traverse_path": traverse_path,
 			"total_cleaned_rooms": total_cleaned_rooms,
 			"total_batches": total_batches,
-			"rooms_passed_without_cleaning": room_passed_without_cleaning,
+			"rooms_passed_without_cleaning": len(traverse_path) - len(self.cleaned_room),
 			"final_room": self.current_room,
 		}
 
