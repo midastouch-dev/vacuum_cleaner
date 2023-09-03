@@ -1,6 +1,6 @@
 # Robot Vacuum Cleaner
 
-![ScreenShot](https://github.com/midastouch-dev/vacuum_cleaner/blob/master/screenshot/run.jpg)
+![Run](https://github.com/midastouch-dev/vacuum_cleaner/blob/main/screenshot/run.jpg)
 
 Control the robot vacuum cleaner by comments and get some results such as traversing path, cleaned rooms, rooms passed without clean, etc. It receives the cleaning instructions as an array of arrays like [[3,2,4],[2,8,4],[4,6,4,9]]. Also receives set of comments called ‘Priority Rooms’, [7,14, 1]. The vacuum cleaner cleans the rooms using two type of comments.
 This project is based on Ubuntu 22.04.
@@ -49,7 +49,7 @@ Implemented the test case using Pytest.  This project sets 12 cases of test case
 ```
 Sudo docker exec [CONTAINER ID] pytest test/test.py -v
 ```
-![ScreenShot](https://github.com/midastouch-dev/vacuum_cleaner/blob/master/screenshot/testjpg)
+![Test](https://github.com/midastouch-dev/vacuum_cleaner/blob/main/screenshot/test.jpg)
 
 
 3. Finish the docker image
