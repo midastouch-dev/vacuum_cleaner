@@ -33,7 +33,14 @@ This project is based on Ubuntu 22.04.
 <br/>
 
 ## Running the app locally
-1. Run the docker image
+1. Clone the code
+```
+git clone https://github.com/midastouch-dev/vacuum_cleaner.git   
+```
+```
+cd vacuum_cleaner
+```
+2. Run the docker image
 ```
 sudo bash start.sh
 ```
@@ -44,7 +51,7 @@ You can check the running containers by the following comment.
 ```
 sudo docker ps
 ```
-2. Test the project
+3. Test the project
 Implemented the test case using Pytest.  This project sets 12 cases of test case and passed 100%
 ```
 Sudo docker exec [CONTAINER ID] pytest test/test.py -v
@@ -52,7 +59,7 @@ Sudo docker exec [CONTAINER ID] pytest test/test.py -v
 ![Test](https://github.com/midastouch-dev/vacuum_cleaner/blob/main/screenshot/test.jpg)
 
 
-3. Finish the docker image
+4. Finish the docker image
 ```
 sudo docker stop [CONTAINER ID]
 ```
