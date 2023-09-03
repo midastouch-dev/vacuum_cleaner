@@ -9,6 +9,7 @@ class VacuumCleaner:
 	"""
 	def __init__(self):
 		self.current_room = 1 # The room number that the vacuum cleaner is located on for now
+		self.start_room = self.current_room # The room number that the vacuum cleaner is located when start the cleaning
 		self.cleaned_room = [] # The list of rooms the vacuum cleaner cleaned
 
 	"""
@@ -26,8 +27,8 @@ class VacuumCleaner:
 			path.extend(range(self.current_room - 1, room - 1, -1))
 			self.cleaned_room.append(room)
 		elif clean_start_room:
+			path.extend([room]);
 			self.cleaned_room.append(room)
-			path.extend([room])
 
 		self.current_room = room
 
@@ -38,12 +39,12 @@ class VacuumCleaner:
 	It clean the rooms of priority rooms first and clean other rooms of batch.
 	"""
 	def process_clearning_batches(self, cleaning_batches, priority_rooms):
-		total_cleaned_rooms = 0 # The tatal count of rooms cleaned by vacuum
 		total_batches = 0 # The total count of batches processed
 		traverse_path = [] # The path of vacuum cleaner traverse
 		clean_start_room = True # If the first cleaning room is same to current room, clean the room
 		self.cleaned_room = [] # Initialized the cleaned rooms when start the cleaning
-
+		self.start_room = self.current_room
+		
 		# Get all batches(array) from cleaning batches(array of array)
 		for batch in cleaning_batches:
 			total_batches += 1 # Increase the total count of batches processed
@@ -59,7 +60,6 @@ class VacuumCleaner:
 					path = self.traverse_to(priority_room, clean_start_room)
 					traverse_path.extend(path)
 					cleaned_in_batch.append(priority_room)
-					total_cleaned_rooms += 1
 					clean_start_room = False
 
 			"""
@@ -72,15 +72,18 @@ class VacuumCleaner:
 				if room not in cleaned_in_batch:
 					path = self.traverse_to(room, clean_start_room)
 					traverse_path.extend(path)
-					total_cleaned_rooms += 1
 					clean_start_room = False
 
+		rooms_passed_without_cleaning = len(traverse_path) - len(self.cleaned_room)
+		
+		if traverse_path[0] != self.start_room:
+			traverse_path.insert(0, self.start_room)
 
 		return {
 			"cleaned_rooms": self.cleaned_room,
 			"traverse_path": traverse_path,
-			"total_cleaned_rooms": total_cleaned_rooms,
+			"total_cleaned_rooms": len(self.cleaned_room),
 			"total_batches": total_batches,
-			"rooms_passed_without_cleaning": len(traverse_path) - len(self.cleaned_room),
+			"rooms_passed_without_cleaning": rooms_passed_without_cleaning,
 			"final_room": self.current_room,
 		}
