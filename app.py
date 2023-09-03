@@ -3,7 +3,7 @@ from vacuumcleaner.vacuumcleaner import VacuumCleaner
 
 app = Flask(__name__)
 
-vacuum_cleaner = VacuumCleaner(); #Initialized the Vacuum Cleaner class.
+vacuum_cleaner = VacuumCleaner() #Initialized the Vacuum Cleaner class.
 
 """
 Received the comments via API with 2 parameters, cleaning_batches and priority_rooms.

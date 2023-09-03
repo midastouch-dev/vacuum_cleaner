@@ -9,22 +9,25 @@ class VacuumCleaner:
 	"""
 	def __init__(self):
 		self.current_room = 1 # The room number that the vacuum cleaner is located on for now
-		self.cleaned_room = []; # The list of rooms the vacuum cleaner cleaned
+		self.cleaned_room = [] # The list of rooms the vacuum cleaner cleaned
 
 	"""
 	The vacuum move to cleaning room from current position and the current_room is set to the cleaning room.
 	Return the rooms passed without cleaning and the path during movement.
 	Assume doesn't clean again if the cleaning room is same as current room.
 	"""
-	def traverse_to(self, room):
+	def traverse_to(self, room, clean_start_room):
 		path = [] # The path the vacuum is moved to cleaning room from current room
 
 		if room > self.current_room: # The vacuum move right
 			path.extend(range(self.current_room + 1, room + 1))
-			self.cleaned_room.append(room);
+			self.cleaned_room.append(room)
 		elif room < self.current_room: # The vacuum move left
 			path.extend(range(self.current_room - 1, room - 1, -1))
-			self.cleaned_room.append(room);
+			self.cleaned_room.append(room)
+		elif clean_start_room:
+			self.cleaned_room.append(room)
+			path.extend([room])
 
 		self.current_room = room
 
@@ -38,7 +41,8 @@ class VacuumCleaner:
 		total_cleaned_rooms = 0 # The tatal count of rooms cleaned by vacuum
 		total_batches = 0 # The total count of batches processed
 		traverse_path = [] # The path of vacuum cleaner traverse
-		self.cleaned_room = []; # Initialized the cleaned rooms when start the cleaning
+		clean_start_room = True # If the first cleaning room is same to current room, clean the room
+		self.cleaned_room = [] # Initialized the cleaned rooms when start the cleaning
 
 		# Get all batches(array) from cleaning batches(array of array)
 		for batch in cleaning_batches:
@@ -52,10 +56,11 @@ class VacuumCleaner:
 			"""
 			for priority_room in priority_rooms:
 				if priority_room in batch:
-					path = self.traverse_to(priority_room)
+					path = self.traverse_to(priority_room, clean_start_room)
 					traverse_path.extend(path)
 					cleaned_in_batch.append(priority_room)
 					total_cleaned_rooms += 1
+					clean_start_room = False
 
 			"""
 			Clean the rooms that weren't included in priority. 
@@ -65,9 +70,10 @@ class VacuumCleaner:
 			"""
 			for room in batch:
 				if room not in cleaned_in_batch:
-					path = self.traverse_to(room)
+					path = self.traverse_to(room, clean_start_room)
 					traverse_path.extend(path)
 					total_cleaned_rooms += 1
+					clean_start_room = False
 
 
 		return {
