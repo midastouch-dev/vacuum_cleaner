@@ -1,5 +1,7 @@
 # Robot Vacuum Cleaner
 
+![ScreenShot](https://github.com/midastouch-dev/vacuum_cleaner/blob/master/screenshot/run.jpg)
+
 Control the robot vacuum cleaner by comments and get some results such as traversing path, cleaned rooms, rooms passed without clean, etc. It receives the cleaning instructions as an array of arrays like [[3,2,4],[2,8,4],[4,6,4,9]]. Also receives set of comments called ‘Priority Rooms’, [7,14, 1]. The vacuum cleaner cleans the rooms using two type of comments.
 This project is based on Ubuntu 22.04.
 
@@ -10,8 +12,15 @@ This project is based on Ubuntu 22.04.
 ## Project Structure
 
 ```bash
-├── Dockerfile
+├── screenshot
+├── vacuumcleaner
+│   ├── __init__.py
+│   ├── vacuumcleaner.py
+├── test
+│   ├── __init__.py
+│   ├── test.py
 ├── app.py
+├── Dockerfile
 ├── requirements.txt
 ├── start.sh
 ├── README.md
@@ -24,18 +33,26 @@ This project is based on Ubuntu 22.04.
 <br/>
 
 ## Running the app locally
+1. Run the docker image
 ```
 sudo bash start.sh
 ```
 
 Once the server is up-and-running, go to your browser, and visit http://localhost:8000 to use the app.
 
-You can see the running containers by the following comment.
+You can check the running containers by the following comment.
 ```
 sudo docker ps
 ```
-
-Finish the docker image.
+2. Test the project
+Implemented the test case using Pytest.  This project sets 12 cases of test case and passed 100%
 ```
-sudo docker stop [container's id]
+Sudo docker exec [CONTAINER ID] pytest test/test.py -v
+```
+![ScreenShot](https://github.com/midastouch-dev/vacuum_cleaner/blob/master/screenshot/testjpg)
+
+
+3. Finish the docker image
+```
+sudo docker stop [CONTAINER ID]
 ```
